@@ -3,13 +3,17 @@ import time
 import customtkinter as tkinter
 
 class SliderFrame(tkinter.CTkFrame):
-    def __init__(self, master):
+    def __init__(self, master, title):
         super().__init__(master)
 
+        self.title = title
+        self.title = tkinter.CTkLabel(self, text=self.title, fg_color="gray30", corner_radius=6)
+        self.title.grid(row=0, column=0, padx=10, pady=(10,0), sticky='ew')
+
         #instantiate sliders here
-        self.slider1 = Slider(0,0,0,180,self)
-        self.slider2 = Slider(1,0,0,180,self)
-        self.slider3 = Slider(2,0,0,180,self)
+        self.slider1 = Slider(1,0,0,180,self)
+        self.slider2 = Slider(2,0,0,180,self)
+        self.slider3 = Slider(3,0,0,180,self)
 
     def slider_event_print(self):
         print(
@@ -42,11 +46,11 @@ class App(tkinter.CTk):
         super().__init__()
 
         self.title('Shmingus')
-        self.geometry('400x180')
+        self.geometry('400x220')
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
 
-        self.slider_frame = SliderFrame(self)
+        self.slider_frame = SliderFrame(self, 'Servo Angles')
         self.slider_frame.grid(row=0, column=0, padx=10, pady=(10, 0), sticky="nsw")
 
 #initialise the app

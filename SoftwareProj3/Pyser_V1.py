@@ -1,6 +1,12 @@
 import serial
 import time
 import customtkinter as tkinter
+import struct
+
+port = 'COM5'
+baud = 115200
+
+arduino = serial.Serial(port, baud, timeout=.1)
 
 class SliderFrame(tkinter.CTkFrame):
     def __init__(self, master, title):
@@ -19,6 +25,9 @@ class SliderFrame(tkinter.CTkFrame):
         print(
             f"Cont1: {self.slider1.val}, {self.slider1.byte}\nCont2: {self.slider2.val}, {self.slider2.byte}\nCont3: {self.slider3.val}, {self.slider3.byte}\n"
         )
+
+        enc = f'<{self.slider1.val}, {self.slider2.val}, {self.slider3.val}>'
+        arduino.write(bytes(enc, 'utf-8'))
 
 class Slider(SliderFrame):
     def __init__(self, row, col, min, max, parentframe):

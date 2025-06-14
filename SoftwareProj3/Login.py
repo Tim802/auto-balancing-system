@@ -66,15 +66,15 @@ class Button(Widget):
         self.widget = ctk.CTkButton(self.master, text=self.text, command=self.button_event)
         self.arrange(self.widget)
 
-    def button_event():
+    def button_event(self):
         print('Button Pressed')
 
 class LoginButton(Button):
-    def button_event():
+    def button_event(self):
         print('Login Button Pressed')
 
 class SignUpButton(Button):
-    def button_event():
+    def button_event(self):
         print('Sign Up Button Pressed')
 
 class TextEntry(Widget):

@@ -1,72 +1,107 @@
-import customtkinter as tkinter
+import customtkinter as ctk
 
-class LoginFrame(tkinter.CTkFrame):
-    def __init__(self, master, row, col):
+class Frame(ctk.CTkFrame):
+    def __init__(self, master, row, col, padx, pady, sticky, rowNum, colNum):
         super().__init__(master)
         self.row = row
         self.col = col
-        self.grid(row=self.row, column=self.col, padx=20, pady=20, sticky='nsew')
+        self.padx = padx
+        self.pady = pady
+        self.sticky = sticky
+        self.rowNum = rowNum
+        self.colNum = colNum
 
-        self.buttons = ButtonFrame(self, 0, 0)
-        self.email = TextEntry(self, 'Enter Your Email', 1, 0)
-        self.password = TextEntry(self, 'Enter Your Password', 2, 0)
+        self.grid(row=self.row, column=self.col, padx=self.padx, pady=self.pady, sticky=self.sticky)
+        self.grid_rowconfigure(self.rowNum, weight=1)
+        self.grid_columnconfigure(self.colNum, weight=1)
 
-class ButtonFrame(tkinter.CTkFrame):
-    def __init__(self, master, row, col):
-        super().__init__(master)
+class LoginFrame(Frame):
+    def __init__(self, master, row, col, padx, pady, sticky, rowNum, colNum):
+        super().__init__(master, row, col, padx, pady, sticky, rowNum, colNum)
+
+        #add entry frame, button frame, and title frame
+        self.title = TitleFrame(self, 0, 0, 20, 20, 'ew', 0, 0)
+        self.entry = EntryFrame(self, 1, 0, 20, 20, 'ew', (0,1), 0)
+        self.buttons = ButtonFrame(self, 2, 0, 20, 20, 'ew', 0, (0,1))
+
+class ButtonFrame(Frame):
+    def __init__(self, master, row, col, padx, pady, sticky, rowNum, colNum):
+        super().__init__(master, row, col, padx, pady, sticky, rowNum, colNum)
+
+        #add buttons
+        self.login = LoginButton(self, 0, 0, 20, 20, 'ew', 'Log In')
+        self.signup = SignUpButton(self, 0, 0, 20, 20, 'ew', 'Sign Up')
+
+class EntryFrame(Frame):
+    def __init__(self, master, row, col, padx, pady, sticky, rowNum, colNum):
+        super().__init__(master, row, col, padx, pady, sticky, rowNum, colNum)
+
+        #add text entries
+        self.email = EmailEntry(self, 0, 0, 20, 20, 'ew', 'Enter Your Email')
+        self.password = PasswordEntry(self, 0, 0, 20, 20, 'ew', 'Enter Your Password')
+
+class TitleFrame(Frame):
+    def __init__(self, master, row, col, padx, pady, sticky, rowNum, colNum):
+        super().__init__(master, row, col, padx, pady, sticky, rowNum, colNum)
+
+        #add title labels
+        self.title = PageTitle(self, 0, 0, 20, 20, 'ew', 'Please Enter Your Log In Details')
+
+class Widget:
+    def __init__(self, master, row, col, padx, pady, sticky, text):
+        self.master = master
         self.row = row
         self.col = col
-        self.grid(row=self.row, column=self.col, padx=20, pady=(10, 0), sticky='ew')
-
-        self.loginbutton = LoginButton(self,'Log In', 0, 0)
-        self.signinbutton = SignUpButton(self, 'Sign Up', 0, 1)
-
-class Button(LoginFrame):
-    def __init__(self, master, text, row, col):
-        self.frame = master
+        self.padx = padx
+        self.pady = pady
+        self.sticky = sticky
         self.text = text
-        self.row = row
-        self.col = col
-        self.button = tkinter.CTkButton(self.frame, text=self.text, command=self.button_event)
-        self.button.grid(row=self.row, column=self.col, padx=20, pady=(10, 0))
+
+class Button(Widget):
+    def __init__(self, master, row, col, padx, pady, sticky, text):
+        super().__init__(master, row, col, padx, pady, sticky, text)
+        self.button = ctk.CTkButton(self.master, text=self.text, command=self.button_event)
 
     def button_event():
-        pass
+        print('Button Pressed')
 
 class LoginButton(Button):
     def button_event():
-        #check login creds, move to page if required.
-        pass
+        print('Login Button Pressed')
 
-class SignUpButton(Button):    
+class SignUpButton(Button):
     def button_event():
-        #take to signup page
-        pass
+        print('Sign Up Button Pressed')
 
-class TextEntry(LoginFrame):
-    def __init__(self, master, temptxt, row, col):
-        self.frame = master
-        self.temptext = temptxt
-        self.entry = tkinter.CTkEntry(self.frame, placeholder_text=self.temptext)
+class TextEntry(Widget):
+    def __init__(self, master, row, col, padx, pady, sticky, text):
+        super().__init__(master, row, col, padx, pady, sticky, text)
+        self.textentry = ctk.CTkEntry(self.master, placeholder_text=self.text)
 
-        self.row = row
-        self.col = col
-        #self.grid(row=self.row, column=self.col, padx=20, pady=(10, 0), sticky='ew')
+class EmailEntry(TextEntry):
+    pass
 
-    def call_text(self):
-        self.text = self.entry.get()
-        return self.text
+class PasswordEntry(TextEntry):
+    pass
 
-class App(tkinter.CTk):
+class Label(Widget):
+    def __init__(self, master, row, col, padx, pady, sticky, text):
+        super().__init__(master, row, col, padx, pady, sticky, text)
+        self.label = ctk.CTkLabel(self.master, text=self.text)
+
+class PageTitle(Label):
+    pass
+
+class App(ctk.CTk):
     def __init__(self):
         super().__init__()
 
-        self.title('Login Page')
+        self.title('Log In Page')
         self.geometry('600x500')
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
 
-        self.loginframe = LoginFrame(self, 0, 0)
+        self.loginframe = LoginFrame(self, 0, 0, 100, 20, 'ew', (0, 1, 2), 0)
 
 #instantiate the app
 app = App()

@@ -8,7 +8,6 @@ def encrypt(rawtxt):
 
 def check(input, against):
     check = input.encode()
-    if bcrypt.checkpw(check, against):
-        return 1
-    else:
-        return 0
+    match_bool = bcrypt.checkpw(check, against)
+    print('check result:', match_bool)
+    return match_bool

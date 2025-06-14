@@ -1,4 +1,5 @@
 import customtkinter as ctk
+from DataHandling import Encryption, DatabaseAccess
 
 class Frame(ctk.CTkFrame):
     def __init__(self, master, row, col, padx, pady, sticky, rowNum, colNum):
@@ -72,6 +73,8 @@ class Button(Widget):
 class LoginButton(Button):
     def button_event(self):
         print('Login Button Pressed')
+        #call login attempt function
+        app.log_in_attempt()
 
 class SignUpButton(Button):
     def button_event(self):
@@ -84,10 +87,31 @@ class TextEntry(Widget):
         self.arrange(self.widget)
 
 class EmailEntry(TextEntry):
-    pass
+    def find_email(self):
+        inp = self.widget.get()
+        enc = Encryption.encrypt(inp)
 
+        Users = DatabaseAccess.retreive_all('USERID')
+
+        for n in Users:
+            print(n)
+            print(enc.decode())
+            if Encryption.check(enc.decode(), n[0].encode()):
+                user_id = DatabaseAccess.retreive_id(enc.decode(), 'USERID')
+                return user_id
+        else:
+            return 0
+        
 class PasswordEntry(TextEntry):
-    pass
+    def password_check(self, user_id):
+        inp = self.widget.get()
+        enc = Encryption.encrypt(inp)
+        db_pass = DatabaseAccess.retreive_val(user_id, 'id', 'PASSWORD')
+
+        if Encryption.check(enc.decode(), db_pass.encode()):
+            return True
+        else:
+            return False
 
 class Label(Widget):
     def __init__(self, master, row, col, padx, pady, sticky, text):
@@ -109,6 +133,22 @@ class App(ctk.CTk):
 
         self.loginframe = LoginFrame(self, 0, 0, 100, 20, 'ew', (0, 1, 2), 0)
 
+    def log_in_attempt(self):
+        email_id = self.loginframe.entry.email.find_email()
+        print(email_id)
+        if email_id == 0:
+            print('Invalid Email, Log In Failed')
+            return
+        elif self.loginframe.entry.password.password_check(email_id):
+            print('Valid login details, Login Successful')
+            return
+        else:
+            print('Invalid Password, Login Failed')
+            return
+
 #instantiate the app
 app = App()
 app.mainloop()
+
+#closes user database when not in use
+DatabaseAccess.close_connection()

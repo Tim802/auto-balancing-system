@@ -91,13 +91,13 @@ class EmailEntry(TextEntry):
         inp = self.widget.get()
         enc = Encryption.encrypt(inp)
 
-        Users = DatabaseAccess.retreive_all('USERID')
+        Users = DatabaseAccess.retreive_all('EMAIL')
 
         for n in Users:
             print(n)
             print(enc.decode())
-            if Encryption.check(enc.decode(), n[0].encode()):
-                user_id = DatabaseAccess.retreive_id(enc.decode(), 'USERID')
+            if Encryption.check(enc, n[0]):
+                user_id = DatabaseAccess.retreive_id(enc.decode(), 'EMAIL')
                 return user_id
         else:
             return 0

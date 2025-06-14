@@ -7,7 +7,6 @@ def encrypt(rawtxt):
     return hashed_txt
 
 def check(input, against):
-    check = input.encode()
-    match_bool = bcrypt.checkpw(check, against)
+    match_bool = bcrypt.checkpw(input, against)
     print('check result:', match_bool)
     return match_bool

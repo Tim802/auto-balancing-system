@@ -1,4 +1,5 @@
 import sqlite3
+import bcrypt
 
 connection = sqlite3.connect('Python-CTk-Frontend/DataHandling/UserData.db')
 cursor = connection.cursor()

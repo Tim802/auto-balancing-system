@@ -94,9 +94,9 @@ class EmailEntry(TextEntry):
         Users = DatabaseAccess.retreive_all('EMAIL')
 
         for n in Users:
-            print(n)
+            print(n[0])
             print(enc.decode())
-            if Encryption.check(enc, n[0]):
+            if Encryption.check(enc, n[0].encode()):
                 user_id = DatabaseAccess.retreive_id(enc.decode(), 'EMAIL')
                 return user_id
         else:

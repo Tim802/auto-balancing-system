@@ -38,8 +38,8 @@ class EntryFrame(Frame):
         super().__init__(master, row, col, padx, pady, sticky, rowNum, colNum)
 
         #add text entries
-        self.email = EmailEntry(self, 0, 0, 20, 20, 'ew', 'Enter Your Email')
-        self.password = PasswordEntry(self, 1, 0, 20, 20, 'ew', 'Enter Your Password')
+        self.email = TextEntry(self, 0, 0, 20, 20, 'ew', 'Enter Your Email')
+        self.password = TextEntry(self, 1, 0, 20, 20, 'ew', 'Enter Your Password')
 
 class TitleFrame(Frame):
     def __init__(self, master, row, col, padx, pady, sticky, rowNum, colNum):
@@ -86,32 +86,9 @@ class TextEntry(Widget):
         self.widget = ctk.CTkEntry(self.master, placeholder_text=self.text)
         self.arrange(self.widget)
 
-class EmailEntry(TextEntry):
-    def find_email(self):
-        inp = self.widget.get()
-        enc = Encryption.encrypt(inp)
-
-        Users = DatabaseAccess.retreive_all('EMAIL')
-
-        for n in Users:
-            print(n[0])
-            print(enc.decode())
-            if Encryption.check(enc, n[0].encode()):
-                user_id = DatabaseAccess.retreive_id(enc.decode(), 'EMAIL')
-                return user_id
-        else:
-            return 0
-        
-class PasswordEntry(TextEntry):
-    def password_check(self, user_id):
-        inp = self.widget.get()
-        enc = Encryption.encrypt(inp)
-        db_pass = DatabaseAccess.retreive_val(user_id, 'id', 'PASSWORD')
-
-        if Encryption.check(enc.decode(), db_pass.encode()):
-            return True
-        else:
-            return False
+    def input_text(self):
+        self.input = self.widget.get()
+        return self.input
 
 class Label(Widget):
     def __init__(self, master, row, col, padx, pady, sticky, text):
@@ -134,17 +111,39 @@ class App(ctk.CTk):
         self.loginframe = LoginFrame(self, 0, 0, 100, 20, 'ew', (0, 1, 2), 0)
 
     def log_in_attempt(self):
-        email_id = self.loginframe.entry.email.find_email()
-        print(email_id)
-        if email_id == 0:
-            print('Invalid Email, Log In Failed')
-            return
-        elif self.loginframe.entry.password.password_check(email_id):
-            print('Valid login details, Login Successful')
-            return
+        #run logic to find if valid login attempt
+        self.inp_email = self.loginframe.entry.email.input_text()
+        self.inp_password = self.loginframe.entry.password.input_text()
+
+        self.data = Encryption.Encrypt(self.inp_email, self.inp_password)
+        db = DatabaseAccess.fetch()
+        print('database:', db)
+
+        id_list = []
+        email_list = []
+        password_list = []
+
+        for n in db:
+            id_list.append(n[0])
+            email_list.append(n[1])
+            password_list.append(n[2])
+
+        for i in email_list:
+            if self.data.hash_checker(self.data.b_email, i):
+                user_index = email_list.index(i)
+                valid_email = True
+                break
         else:
-            print('Invalid Password, Login Failed')
-            return
+            valid_email = False
+
+        print('valid email:', valid_email)
+
+        if valid_email:
+            if self.data.hash_checker(self.data.b_password, password_list[user_index]):
+                print('Valid email and password. Login successful')
+            else:
+                print("Invalid Password entered")
+
 
 #instantiate the app
 app = App()

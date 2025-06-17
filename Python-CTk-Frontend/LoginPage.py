@@ -1,4 +1,4 @@
-from CustomtkinterBase import App, Frame, Button, TextEntry, Label
+from CustomtkinterBase import Window
 
 def log_in_attempt():
     pass
@@ -12,98 +12,110 @@ layout = {
     "dim": "600x500",
     "CentralFrame": {
         "obj": "Frame",
-        "master": "PLACEHOLDER",
-        "row": 0,
-        "col": 0,
-        "padx": 100,
-        "pady": 20,
-        "sticky": "ew",
+        "params": {
+            "row": 0,
+            "col": 0,
+            "padx": 100,
+            "pady": 20,
+            "sticky": "ew"
+        },
         "contains": {
             "TitleFrame": {
                 "obj": "Frame",
-                "master": "PLACEHOLDER",
-                "row": 0,
-                "col": 0,
-                "padx": 20,
-                "pady": 20,
-                "sticky": "ew",
+                "params": {
+                    "row": 0,
+                    "col": 0,
+                    "padx": 20,
+                    "pady": 20,
+                    "sticky": "ew"
+                },
                 "contains": {
                     "PageTitle": {
                         "obj": "Label",
-                        "master": "PLACEHOLDER",
-                        "row": 0,
-                        "col": 0,
-                        "padx": 20,
-                        "pady": 20,
-                        "sticky": "ew",
-                        "text": "Please Enter Your Log In Details"
+                        "params": {
+                            "row": 0,
+                            "col": 0,
+                            "padx": 20,
+                            "pady": 20,
+                            "sticky": "ew",
+                            "text": "Please Enter Your Log In Details"
+                        }
                     }
                 }
             },
             "EntryFrame": {
                 "obj": "Frame",
-                "master": "PLACEHOLDER",
-                "row": 1,
-                "col": 0,
-                "padx": 20,
-                "pady": 20,
-                "sticky": "ew",
+                "params": {
+                    "row": 1,
+                    "col": 0,
+                    "padx": 20,
+                    "pady": 20,
+                    "sticky": "ew"
+                },
                 "contains": {
                     "EmailEntry":{
                         "obj": "TextEntry",
-                        "master": "PLACEHOLDER",
-                        "row": 0,
-                        "col": 0,
-                        "padx": 20,
-                        "pady": 20,
-                        "sticky": "ew",
-                        "text": "Enter Your Email"
+                        "params": {
+                            "row": 0,
+                            "col": 0,
+                            "padx": 20,
+                            "pady": 20,
+                            "sticky": "ew",
+                            "text": "Enter Your Email"
+                        }
                     },
                     "PasswordEntry": {
                         "obj": "TextEntry",
-                        "master": "PLACEHOLDER",
-                        "row": 1,
-                        "col": 0,
-                        "padx": 20,
-                        "pady": 20,
-                        "sticky": "ew",
-                        "text": "Enter Your Password"
+                        "params": {
+                            "row": 1,
+                            "col": 0,
+                            "padx": 20,
+                            "pady": 20,
+                            "sticky": "ew",
+                            "text": "Enter Your Password"
+                        }
                     }
                 }
             },
             "ButtonFrame": {
                 "obj": "Frame",
-                "master": "PLACEHOLDER",
-                "row": 2,
-                "col": 0,
-                "padx": 20,
-                "pady": 20,
-                "sticky": "ew",
+                "params": {
+                    "row": 2,
+                    "col": 0,
+                    "padx": 20,
+                    "pady": 20,
+                    "sticky": "ew"
+                },
                 "contains": {
                     "LoginButton": {
                         "obj": "Button",
-                        "master": "PLACEHOLDER",
-                        "row": 0,
-                        "col": 0,
-                        "padx": 20,
-                        "pady": 20,
-                        "sticky": "ew",
-                        "text": "Log In",
-                        "command": log_in_attempt
+                        "params": {
+                            "row": 0,
+                            "col": 0,
+                            "padx": 20,
+                            "pady": 20,
+                            "sticky": "ew",
+                            "text": "Log In",
+                            "command": log_in_attempt
+                        }
                     },
                     "SignUpButton": {
                         "obj": "Button",
-                        "master": "PLACEHOLDER",
-                        "row": 0,
-                        "col": 1,
-                        "padx": 20,
-                        "pady": 20,
-                        "sticky": "ew",
-                        "text": "Sign Up",
-                        "command": sign_in_attempt
+                        "params": {
+                            "row": 0,
+                            "col": 1,
+                            "padx": 20,
+                            "pady": 20,
+                            "sticky": "ew",
+                            "text": "Sign Up",
+                            "command": sign_in_attempt
+                        }
                     }
                 }
             }
         }
     }
 }
+
+login = Window(layout)
+login.run()

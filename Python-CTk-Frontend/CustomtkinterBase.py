@@ -19,14 +19,17 @@ class Window:
         for key, object in inp_dict.items():
             if isinstance(object, dict):
                 if "contains" in object:
-                    container_objects = self.decode_input_dict(object["contains"], master_object)
                     new_class = self.class_constructor(object)
-                    new_class_instance = new_class(master=master_object, contains=container_objects, **object["params"])
+                    new_class_instance = new_class(master=master_object, **object["params"])
+                    container_objects = self.decode_input_dict(object["contains"], new_class_instance)
+                    new_class_instance.contain = container_objects
+                    new_class_instance.arrange()
                     output_dict.update({key: new_class_instance})
                     print(vars(new_class_instance))
                 else:
                     new_class = self.class_constructor(object)
                     new_class_instance = new_class(master=master_object, **object["params"])
+                    new_class_instance.arrange(new_class_instance.widget)
                     output_dict.update({key: new_class_instance})
                     print(vars(new_class_instance))
         
@@ -49,34 +52,27 @@ class Window:
             return
         
 class Frame(ctk.CTkFrame):
-    def __init__(self, master, row, col, padx, pady, sticky, contains):
+    def __init__(self, master, row, col, padx, pady, sticky):
         super().__init__(master)
-        print("shmingus")
         self.row = row
         self.col = col
         self.padx = padx
         self.pady = pady
         self.sticky = sticky
-        self.contain = contains
-
-        self.arrange()
-
-    def __repr__(self):
-        print(f"object Frame at: {self.row}, {self.col}")
 
     def arrange(self):
         self.grid(row=self.row, column=self.col, padx=self.padx, pady=self.pady, sticky=self.sticky)
         self.row_index = []
         self.col_index = []
 
-        for n in self.contain:
-            if "row" in n["params"]:
-                self.row_index.append(n["params"]["row"])
-            elif "col" in n["params"]:
-                self.col_index.append(n["params"]["col"])
+        for n in self.contain.values():
+            if hasattr(n, 'row'):
+                self.row_index.append(n.row)
+            if hasattr(n, 'col'):
+                self.col_index.append(n.col)
 
-        self.grid_rowconfigure(tuple(self.row_index), weight=1)
-        self.grid_columnconfigure(tuple(self.col_index), weight=1)
+        self.grid_rowconfigure(tuple(set(self.row_index)), weight=1)
+        self.grid_columnconfigure(tuple(set(self.col_index)), weight=1)
 
 class Widget:
     def __init__(self, master, row, col, padx, pady, sticky, text):
@@ -93,25 +89,20 @@ class Widget:
         widget.grid(row=self.row, column=self.col, padx=self.padx, pady=self.pady, sticky=self.sticky)
 
 class Button(Widget):
-    def __init__(self, master, row, col, padx, pady, sticky, text):
+    def __init__(self, master, row, col, padx, pady, sticky, text, command):
         super().__init__(master, row, col, padx, pady, sticky, text)
-        self.widget = ctk.CTkButton(self.master, text=self.text, command=self.button_event)
-        self.arrange(self.widget)
-
-    def button_event(self):
-        print("button moment")
+        self.command = command
+        self.widget = ctk.CTkButton(self.master, text=self.text, command=self.command)
 
 class TextEntry(Widget):
     def __init__(self, master, row, col, padx, pady, sticky, text):
         super().__init__(master, row, col, padx, pady, sticky, text)
         self.widget = ctk.CTkEntry(self.master, placeholder_text=self.text)
-        self.arrange(self.widget)
 
 class Label(Widget):
     def __init__(self, master, row, col, padx, pady, sticky, text):
         super().__init__(master, row, col, padx, pady, sticky, text)
         self.widget = ctk.CTkLabel(self.master, text=self.text)
-        self.arrange(self.widget)
 
 class App(ctk.CTk):
     def __init__(self, headtext, dimensions):

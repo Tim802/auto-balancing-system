@@ -114,7 +114,6 @@ class App(ctk.CTk):
         #run logic to find if valid login attempt
         self.inp_email = self.loginframe.entry.email.input_text()
         self.inp_password = self.loginframe.entry.password.input_text()
-
         self.data = Encryption.Encrypt(self.inp_email, self.inp_password)
         db = DatabaseAccess.fetch()
         print('database:', db)

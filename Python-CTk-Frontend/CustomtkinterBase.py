@@ -1,4 +1,6 @@
 import customtkinter as ctk
+import pygyat
+
 
 class Window:
     def __init__(self, layout_dict):
@@ -14,6 +16,20 @@ class Window:
         self.application.mainloop()
         #may need to close dependencies after running
 
+    def text_get(self):
+        print("gathering text entries")
+        entered_text_dict = {}
+        print(self.layout_object_dict.items())
+        for key, object in self.layout_object_dict.items():
+            if isinstance(object, dict):
+                print("dict object found")
+                if object["obj"] == 'TextEntry':
+                    entered_text = object.text_return()
+                    entered_text_dict.update({key: entered_text})
+
+        print(entered_text_dict)
+        return entered_text_dict
+    
     def decode_input_dict(self, inp_dict, master_object):
         output_dict = {}
         for key, object in inp_dict.items():
@@ -25,13 +41,11 @@ class Window:
                     new_class_instance.contain = container_objects
                     new_class_instance.arrange()
                     output_dict.update({key: new_class_instance})
-                    print(vars(new_class_instance))
                 else:
                     new_class = self.class_constructor(object)
                     new_class_instance = new_class(master=master_object, **object["params"])
                     new_class_instance.arrange(new_class_instance.widget)
                     output_dict.update({key: new_class_instance})
-                    print(vars(new_class_instance))
         
         print(output_dict)
         return output_dict
@@ -98,6 +112,10 @@ class TextEntry(Widget):
     def __init__(self, master, row, col, padx, pady, sticky, text):
         super().__init__(master, row, col, padx, pady, sticky, text)
         self.widget = ctk.CTkEntry(self.master, placeholder_text=self.text)
+
+    def text_return(self):
+        self.inptext = self.widget.get()
+        return self.inptext
 
 class Label(Widget):
     def __init__(self, master, row, col, padx, pady, sticky, text):

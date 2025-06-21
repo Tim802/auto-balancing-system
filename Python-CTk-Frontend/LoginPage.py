@@ -1,10 +1,43 @@
 from CustomtkinterBase import Window
+from DataHandling import Encryption, DatabaseAccess
 
 def log_in_attempt():
-    pass
+    print("login button pressed")
+    inp_email = login.application.contain["CentralFrame"].contain['EntryFrame'].contain['EmailEntry'].text_return()
+    inp_password = login.application.contain["CentralFrame"].contain['EntryFrame'].contain['PasswordEntry'].text_return()
+    print(inp_email, inp_password)
+    print('shmigus')
+
+    data = Encryption.Encrypt(inp_email, inp_password)
+    db = DatabaseAccess.fetch()
+    print('database:', db)
+    id_list = []
+    email_list = []
+    password_list = []
+
+    for n in db:
+        id_list.append(n[0])
+        email_list.append(n[1])
+        password_list.append(n[2])
+
+    for i in email_list:
+        if data.hash_checker(data.b_email, i):
+            user_index = email_list.index(i)
+            valid_email = True
+            break
+    else:
+        valid_email = False
+
+    print('valid email:', valid_email)
+
+    if valid_email:
+        if data.hash_checker(data.b_password, password_list[user_index]):
+            print('Valid email and password. Login successful')
+        else:
+            print("Invalid Password entered")
 
 def sign_in_attempt():
-    pass
+    print("sign in button pressed")
 
 #this should be parsed into a class of CustomtkinterBase that should create the website with a command to start the mainloop
 layout = {

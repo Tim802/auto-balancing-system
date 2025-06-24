@@ -1,4 +1,4 @@
-from CustomtkinterBase import Window
+from CustomtkinterBase import Window, InvLogin
 from DataHandling import Encryption, DatabaseAccess
 
 def log_in_attempt():
@@ -27,6 +27,7 @@ def log_in_attempt():
             break
     else:
         valid_email = False
+        err_msg = InvLogin()
 
     print('valid email:', valid_email)
 
@@ -35,6 +36,7 @@ def log_in_attempt():
             print('Valid email and password. Login successful')
         else:
             print("Invalid Password entered")
+            err_msg = InvLogin()
 
 def sign_in_attempt():
     print("sign in button pressed")
@@ -131,19 +133,7 @@ layout = {
                             "text": "Log In",
                             "command": log_in_attempt
                         }
-                    },
-                    "SignUpButton": {
-                        "obj": "Button",
-                        "params": {
-                            "row": 0,
-                            "col": 1,
-                            "padx": 20,
-                            "pady": 20,
-                            "sticky": "ew",
-                            "text": "Sign Up",
-                            "command": sign_in_attempt
-                        }
-                    }
+                    }                    
                 }
             }
         }

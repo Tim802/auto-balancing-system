@@ -1,6 +1,5 @@
 import customtkinter as ctk
-import pygyat
-
+import random
 
 class Window:
     def __init__(self, layout_dict):
@@ -121,6 +120,23 @@ class Label(Widget):
     def __init__(self, master, row, col, padx, pady, sticky, text):
         super().__init__(master, row, col, padx, pady, sticky, text)
         self.widget = ctk.CTkLabel(self.master, text=self.text)
+
+class InvLogin(ctk.CTkToplevel):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.geometry("350x70")
+
+        x = random.randint(1, 1000)
+
+        if x == 69:
+            text = "Try again bitch"
+        else:
+            text = "Your Login Details are invalid. Please try again"
+
+        print(text)
+
+        self.label = ctk.CTkLabel(self, text=text)
+        self.label.pack(padx=20, pady=20)
 
 class App(ctk.CTk):
     def __init__(self, headtext, dimensions):

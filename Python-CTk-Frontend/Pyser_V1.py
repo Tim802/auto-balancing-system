@@ -1,7 +1,5 @@
 import serial
-import time
 import customtkinter as tkinter
-import struct
 
 port = 'COM5'
 baud = 115200

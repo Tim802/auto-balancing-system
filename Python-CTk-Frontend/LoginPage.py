@@ -1,5 +1,7 @@
 from CustomtkinterBase import Window, InvLogin
 from DataHandling import Encryption, DatabaseAccess
+import sys
+import subprocess
 
 def log_in_attempt():
     print("login button pressed")
@@ -34,6 +36,8 @@ def log_in_attempt():
     if valid_email:
         if data.hash_checker(data.b_password, password_list[user_index]):
             print('Valid email and password. Login successful')
+            subprocess.Popen(['python', 'python-CTk-Frontend/Pyser_V1.py'])
+            sys.exit("Login Complete")            
         else:
             print("Invalid Password entered")
             err_msg = InvLogin()

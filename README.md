@@ -7,7 +7,9 @@ Code for the mechatronic project for my Software Engineering Class. Project is d
 
 ---
 
-Codebase utilises modules such as pyserial and Customtkinter to work.
+Use
+```pip install -r requirements.txt```
+to download all required libraries, etc.
 
 Codebase must be edited to ensure the correct comport is used to connect to the arduino otherwise the program will not work once signed in.
 

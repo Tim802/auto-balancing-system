@@ -32,4 +32,5 @@ class Encrypt:
     def hash_checker(self, index, stored):
         return bcrypt.checkpw(index, stored.encode())
 
-#print(bcrypt.checkpw(b'$2b$12$8wTBbkS93XYVzmnkJjb70uswNNpMrFKa1EyCpWM/MeSwCR0UycP6q', b'$2b$12$0YKwxboJbb2EIsEU0H3RAOWNbTDUjyxdZPKIjHdhAwResTD/XT65q'))
+enc = Encrypt('TestUser', "Password")
+print(enc.hashed_data)
